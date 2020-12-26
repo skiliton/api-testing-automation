@@ -14,7 +14,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
 
-public class ResourceMother {
+public class ResponseMother {
 
     private static String accessToken = System.getProperty("api-test.dropbox.accessToken");
 
@@ -39,14 +39,14 @@ public class ResourceMother {
         return given_Authorized()
                 .contentType(ContentType.JSON)
                 .body(params.toString())
-                .request("https://api.dropboxapi.com/2/sharing/get_file_metadata");
+                .request("POST","https://api.dropboxapi.com/2/sharing/get_file_metadata");
     }
 
     public static Response given_DeleteResponse(JSONObject params){
         return given_Authorized()
                 .contentType(ContentType.JSON)
                 .body(params.toString())
-                .request("https://api.dropboxapi.com/2/files/delete_v2");
+                .request("POST","https://api.dropboxapi.com/2/files/delete_v2");
     }
 
 }
