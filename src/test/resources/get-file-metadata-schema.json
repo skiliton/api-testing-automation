@@ -2,19 +2,42 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type":"object",
   "properties":{
-      ".tag":{"type":"string"},
-      "name":{"type":"string"},
-      "path_lower":{"type":"string"},
-      "path_display":{"type":"string"},
-      "id":{"type":"string"},
-      "client_modified":{"type":"string"},
-      "server_modified":{"type":"string"},
-      "rev":{"type":"string"},
-      "size":{
-        "type": "integer",
-        "minimum": 0
-      },
-      "is_downloadable":{"type":"boolean"},
-      "content_hash":{"type":"string"}
+    "access_type":{
+      "type":"object",
+      "properties":{
+        ".tag": {"type":"string"}
+      }
+    },
+    "id":{"type":"string"},
+    "name":{"type":"string"},
+    "path_lower":{"type":"string"},
+    "path_display":{"type":"string"},
+    "permissions": {"type":"array"},
+    "policy":{
+      "type":"object",
+      "properties":{
+        "acl_update_policy": {
+          "type":"object",
+          "properties":{
+            ".tag": {"type":"string"}
+          }
+        },
+        "shared_link_policy": {
+          "type":"object",
+          "properties":{
+            ".tag": {"type":"string"}
+
+          }
+        },
+        "viewer_info_policy": {
+          "type":"object",
+          "properties":{
+            ".tag": {"type":"string"}
+          }
+        }
+      }
+    },
+    "preview_url":{"type":"string"},
+    "time_invited":{"type":"string"}
   }
 }

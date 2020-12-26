@@ -13,6 +13,8 @@ import java.util.Collections;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import static com.repeta.qa.ResponseMother.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FileTest {
@@ -46,6 +48,21 @@ public class FileTest {
 
     @Test
     @Order(2)
+    public void assertUploadResponseHasCorrectValues(){
+        JSONObject response = new JSONObject(givenUploadResponse.asString());
+        assertEquals("kitten.jpeg",response.getString("name"));
+        assertEquals("/kitten.jpeg",response.getString("path_lower"));
+
+        /* Doesn't work for some mysterious reason JsonPath keeps returning null for existing value
+        givenUploadResponse
+            .then()
+                .body("name",equalTo("kitten.jpeg"))
+                .body("path_lower",equalTo("/kitten.jpeg"));
+        */
+    }
+
+    @Test
+    @Order(3)
     public void assertGetFileMetadataResponseHasCorrectSchema(){
         JSONObject params = new JSONObject();
         params.put("file",fileId);
@@ -59,7 +76,24 @@ public class FileTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
+    public void assertGetFileMetadataResponseHasCorrectValues(){
+        JSONObject response = new JSONObject(givenUploadResponse.asString());
+        assertEquals(fileId,response.get("id"));
+        assertEquals("kitten.jpeg",response.getString("name"));
+        assertEquals("/kitten.jpeg",response.getString("path_lower"));
+
+        /* Doesn't work for some mysterious reason JsonPath keeps returning null for existing value
+        givenGetFileMetadataResponse
+            .then()
+                .body("id",equalTo(fileId))
+                .body("name",equalTo("kitten.jpeg"))
+                .body("path_lower",equalTo("/kitten.jpeg"));
+        */
+    }
+
+    @Test
+    @Order(5)
     public void assertDeleteResponseHasCorrectSchema(){
         JSONObject params = new JSONObject();
         params.put("path","/kitten.jpeg");
@@ -69,5 +103,16 @@ public class FileTest {
             .then()
                 .assertThat()
                 .body(matchesJsonSchemaInClasspath("delete-schema.json"));
+    }
+
+    @Test
+    @Order(6)
+    public void assertDeleteResponseHasCorrectValues(){
+        givenDeleteResponse
+            .then()
+                .body("metadata.id",equalTo(fileId))
+                .body("metadata.name",equalTo("kitten.jpeg"))
+                .body("metadata.path_lower",equalTo("/kitten.jpeg"));
+
     }
 }
